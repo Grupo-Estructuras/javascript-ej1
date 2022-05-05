@@ -1,2 +1,4 @@
 #nodeJS modulos
 node_modules/
+#resultados.txt
+data/resultados.txt
