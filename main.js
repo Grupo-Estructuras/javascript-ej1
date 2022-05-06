@@ -1,12 +1,13 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const {ejecutarScrapGH} = require('./scraping/githubscraper.js');
+const execfunc= require('child_process');
 // import {ejecutarScrapGH} from './scraping/githubscraper.js';
 // scrapGitHub("https://github.com/topics/c")
 // ejecutarScrapGH();
 process.setMaxListeners(Infinity);
 
-ejecutarScrapGH();
+
 
 function getCommandLine() {
   switch (process.platform) {
@@ -21,4 +22,8 @@ function getCommandLine() {
   }
 }
 
-require('child_process').exec(getCommandLine() + ' index.html');
+async function iniciarProc(){
+  await ejecutarScrapGH();
+  execfunc.exec(getCommandLine() + ' index.html');
+}
+iniciarProc();

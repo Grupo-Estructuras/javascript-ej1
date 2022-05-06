@@ -5,7 +5,7 @@ const myChart = new Chart(ctx, {
   data: {
     labels: abcisa,
     datasets: [{
-      label: 'Rating por lenguage',
+      label: 'Apariciones por lenguage',
       data: ordenada,
       backgroundColor: ['rgba(255, 99, 132, 0.2)'],
       borderColor: ['rgba(255, 99, 132, 1)'],

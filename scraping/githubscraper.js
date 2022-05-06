@@ -48,7 +48,7 @@ function calcRating(languages, min, max) {
 
   let abcisa = [];
   let ordenada = [];
-  for (var i = 9; i < 20; i++) {
+  for (var i = 0; i < 10; i++) {
     abcisa.push(languages[i].nombre);
     ordenada.push(languages[i].apar);
   }
@@ -62,12 +62,11 @@ function calcRating(languages, min, max) {
 async function desaliasing(languages) {
   min = 0;
   max = 0;
-  console.log('Antes');
   totalEntry = '';
   try {
     AliasJson = fs.readFileSync('./data/langAliases.json', 'utf-8');
     AliasJson = JSON.parse(AliasJson);
-    console.log(AliasJson);
+    //console.log(AliasJson);
     for (var i = 0; i < 20; i++) {
       actual = languages[i];
       console
@@ -88,7 +87,7 @@ async function desaliasing(languages) {
     fs.writeFileSync(
         './data/Resultados.txt', totalEntry,
         {flag: 'w'});  // escribimos los resultados
-    calcRating(languages, min, max);
+    await calcRating(languages, min, max);
   } catch (err) {
     console.error(err);
   }
@@ -119,7 +118,7 @@ async function ejecutarScrapGH() {  // aca empezamos
     {nombre: 'lua', apar: 0, rating: 0},
     {nombre: 'matlab', apar: 0, rating: 0},
   ]
-  desaliasing(languages);
+  await desaliasing(languages);
 }
 
 module.exports = {
