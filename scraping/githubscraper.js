@@ -44,8 +44,44 @@ function calcRating(languages,min,max){
     for (let i=0;i<20;i++){
         console.log(languages[i].nombre+", "+languages[i].rating+", "+languages[i].apar);
     }
-    //ponemos en un archivo json todo para poder graficar pero no se;
-    fs.writeFileSync("./data/Pgrafica.json", JSON.stringify(languages), { flag:'w' });
+
+    let abcisa=[];
+    let ordenada=[];
+    for (var i=9;i<20;i++){
+        abcisa.push(languages[i].nombre);
+        ordenada.push(languages[i].nombre);
+    }
+    let archivo = `
+function graficar (languages){
+    var abcisa=${JSON.stringify(abcisa)};
+    var ordenada=${JSON.stringify(ordenada)};
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: abcisa,
+            datasets: [{
+                label: 'Rating por lenguage',
+                data: ordenada,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+}`
+    fs.writeFileSync("./data/creargrafico.js", archivo, { flag:'w' });
 }
 
 
