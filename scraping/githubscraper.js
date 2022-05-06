@@ -15,24 +15,45 @@ async function scrapGitHub(urlGH,language){
 
         numero=(/(\d+(,\d*)*)/).exec(descripcion);
         await navegador.close();
-        totalEntry=numero[0]
-        totalEntry=totalEntry.replace(',','');
-        totalEntry=language+"," +totalEntry+"\n";
-        console.log(language+", "+totalEntry);
-        fs.writeFileSync("./data/Resultados.txt", totalEntry, { flag:'a+' });
-        //console.log(numero[0]);
-        //return numero[0];
+        //totalEntry=numero[0]
+        numero[0]=numero[0].replace(',','');
+
+        return numero[0];
     } catch(error){
         console.error();
+        return 0;
     }
     
 }
+function calcRating(languages,min,max){
+    //calculamos rating
+    for (var i=0;i<20;i++){
+        languages[i].rating= ((languages[i].apar - min)/(max - min))*100;
+    }
+    //ordenamos
+    languages.sort((a, b) => { 
+        if(a.rating == b.rating) {
+          return 0; 
+        }
+        if(a.rating > b.rating) {
+          return -1;
+        }
+        return 1;
+    });
+    //imprimimos como se pide
+    for (let i=0;i<20;i++){
+        console.log(languages[i].nombre+", "+languages[i].rating+", "+languages[i].apar);
+    }
+    //ponemos en un archivo json todo para poder graficar pero no se;
+    fs.writeFileSync("./data/Pgrafica.json", JSON.stringify(languages), { flag:'w' });
+}
+
 
 async function desaliasing (languages){
-    //var AliasJson = new XMLHttpRequest();
-    //console.log("xs");
-    //AliasJson.open('GET', './data/langAliases.json', false);
+    min=0;
+    max=0;
     console.log("Antes");
+    totalEntry="";
     try{
         AliasJson=fs.readFileSync('./data/langAliases.json', 'utf-8');
         AliasJson=JSON.parse(AliasJson);
@@ -40,10 +61,22 @@ async function desaliasing (languages){
         for (var i=0;i<20;i++){
             actual=languages[i];
             console
-            linkear="https://github.com/topics/" + AliasJson[languages[i]];
-            console.log(linkear);
-            await scrapGitHub(linkear,languages[i]);
+            linkear="https://github.com/topics/" + AliasJson[languages[i].nombre];
+            //console.log(linkear);
+            languages[i].apar= await scrapGitHub(linkear,languages[i].nombre);
+
+            totalEntry = totalEntry + languages[i].nombre + ", "+ languages[i].apar + "\n";
+
+            if (min>languages[i].apar){
+                min=languages[i].apar;
+            }else if (max<languages[i].apar){
+                max=languages[i].apar;
+            }
+            //console.log (languages[i].apar);
+            
         }
+        fs.writeFileSync("./data/Resultados.txt", totalEntry, { flag:'w' }); //escribimos los resultados
+        calcRating(languages,min,max);
     }catch(err){
         console.error(err);
     }
@@ -52,12 +85,114 @@ async function desaliasing (languages){
 
 //scrapGitHub("https://github.com/topics/c");
 
-async function ejecutarScrapGH(){
-    let languages = ["python","c","java","c++","c#","visual basic","javascript","assembly language","sql","php","r","delphi/object pascal","go","swift","ruby","classic visual basic","objective-c","perl","lua","matlab",];
+async function ejecutarScrapGH(){ //aca empezamos
+    let languages = [
+        {
+            nombre: "python",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "c",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "java",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "c++",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "c#",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "visual basic",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "javascript",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "assembly language",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "sql",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "php",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "r",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "delphi/object pascal",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "go",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "swift",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "ruby",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "classic visual basic",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "objective-c",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "perl",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "lua",
+            apar: 0,
+            rating: 0
+        },
+        {
+            nombre: "matlab",
+            apar: 0,
+            rating: 0
+        },
+    ]
     desaliasing(languages);
 } 
 
 module.exports={
+    
     ejecutarScrapGH,
 };
 
