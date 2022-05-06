@@ -1,10 +1,10 @@
-python, 276402
+python, 276403
 c, 43887
-java, 164326
-c++, 45366
+java, 164327
+c++, 45367
 c#, 46850
 visual basic, 232
-javascript, 307404
+javascript, 307405
 assembly language, 4742
 sql, 24174
 php, 89639
