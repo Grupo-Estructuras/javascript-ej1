@@ -31,6 +31,10 @@ async function scrapGitHub(urlGH) {
             return retorno;
         })
 
+        if (fechasXArt.length==0){ //para ver si ya es una pagina sin nada
+            seguir=1;
+        }
+
         var myRe = /\w+/g; //regex, solo toma los alfanumericos
         fechaHoy=Date.now(); //fecha de hoy
         for (var i=0;i<fechasXArt.length;i++){
@@ -67,7 +71,7 @@ async function scrapGitHub(urlGH) {
         return seguir;
     } catch (error) {
       console.error();
-      return 0;
+      return 1;
     }
 }
 
@@ -78,7 +82,6 @@ async function ejecutarScrapGH2() {  // aca empezamos
     while (ban==0 && pagina<=30){
         linkear = "https://github.com/topics/"+topic_elegido+"?o=desc&s=updated&page=" + pagina;
         ban=await scrapGitHub(linkear);
-        //console.log(topics);
         pagina=pagina+1;
     }
     //ordenamos
