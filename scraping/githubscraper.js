@@ -54,7 +54,7 @@ function calcRating(languages, min, max) {
   }
   let archivo = `
     var abcisa=${JSON.stringify(abcisa)};
-    var ordenada=${JSON.stringify(ordenada)};`
+    var ordenada=${JSON.stringify(ordenada)};`;
   fs.writeFileSync('./scraping/datos.js', archivo, {flag: 'w'});
 }
 
