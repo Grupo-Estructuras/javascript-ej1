@@ -47,16 +47,15 @@ async function scrapGitHub(urlGH) {
             if ( ( fechaHoy-2592000000 ) <= fechaArt){ //vemos si esta en el rango de 30 dias
                 while ((unTopic = myRe.exec(topicsXArt[i])) !== null) { //veremos los topics utilizando regex para extraer
                     topicUnico =unTopic[0]; //topic
-                    if (topicUnico!=topic_elegido){
-                        indexTopic=topics.map(object => object.nombre).indexOf(topicUnico); //vemos si esta en la lista de vistos o no
-                        //indexTopic=topics.nombre.indexOf(topicUnico);
-                        //console.log(topicUnico);
-                        if (indexTopic>=0){ //ya esta en la lista
-                            topics[indexTopic].cantidad=topics[indexTopic].cantidad + 1; //aumenta la cantidad
-                        }else{ //es nuevo
-                            topics.push({nombre:topicUnico,cantidad:1}); //agregamos
-                        }
+                    indexTopic=topics.map(object => object.nombre).indexOf(topicUnico); //vemos si esta en la lista de vistos o no
+                    //indexTopic=topics.nombre.indexOf(topicUnico);
+                    //console.log(topicUnico);
+                    if (indexTopic>=0){ //ya esta en la lista
+                        topics[indexTopic].cantidad=topics[indexTopic].cantidad + 1; //aumenta la cantidad
+                    }else{ //es nuevo
+                        topics.push({nombre:topicUnico,cantidad:1}); //agregamos
                     }
+                    
                 }
                 //console.log("sali del while");
             }else{
