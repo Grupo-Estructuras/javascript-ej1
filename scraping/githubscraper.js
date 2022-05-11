@@ -60,7 +60,7 @@ function calcRating(languages, min, max) {
 
 
 async function desaliasing(languages) {
-  min = 0;
+  min = -1;
   max = 0;
   totalEntry = '';
   try {
@@ -72,14 +72,15 @@ async function desaliasing(languages) {
       console
       linkear = 'https://github.com/topics/' + AliasJson[languages[i].nombre];
       // console.log(linkear);
-      languages[i].apar = await scrapGitHub(linkear, languages[i].nombre);
+      languages[i].apar = Number(await scrapGitHub(linkear, languages[i].nombre));
 
       totalEntry =
           totalEntry + languages[i].nombre + ', ' + languages[i].apar + '\n';
-
-      if (min > languages[i].apar) {
+      
+      if (min > languages[i].apar || min<0) {
         min = languages[i].apar;
-      } else if (max < languages[i].apar) {
+      }
+      if (max < languages[i].apar) {
         max = languages[i].apar;
       }
       // console.log (languages[i].apar);

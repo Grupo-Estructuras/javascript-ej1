@@ -1,7 +1,7 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 var topics=[];
-topic_elegido="sdn";
+topic_elegido="sort";
 async function scrapGitHub(urlGH) {
     try {
         seguir=0;

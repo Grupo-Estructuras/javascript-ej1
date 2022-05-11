@@ -1,3 +1,3 @@
 
-        var abcisa=["sdn","network","nfv","controller","networking","zerotier","docker","networks","kubernetes","cloud","cni","software","defined","faucet","customization","pcap","traffic","grpc","python","vpn"];
-        var ordenada=[41,21,8,8,6,6,5,5,4,3,3,3,3,3,3,3,3,3,3,3];
+        var abcisa=["sort","algorithms","sorting","node","javascript","array","algorithm","mathematics","order","js","arrange","nodejs","math","stdlib","blas","ndarray","extended","permute","strided","data"];
+        var ordenada=[145,43,41,36,31,25,22,21,19,19,19,18,18,18,18,18,18,18,18,16];
