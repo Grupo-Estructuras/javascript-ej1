@@ -1,14 +1,24 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
+function sleep(ms) { //para esperar y que no de error por demasiadas consultas
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
 async function scrapGitHub(urlGH, language) {
   try {
     const navegador = await puppeteer.launch();  // abrimos navegador
     const pagina = await navegador.newPage();    // abrimos pagina
-    await pagina.goto(urlGH);  // vamos al url y esperamos a que responda
+    respuesta = await pagina.goto(urlGH);  // vamos al url y esperamos a que responda
     //abrimos el HTML de la pagina para buscar alli
+    if (respuesta.status() != 200 ){ //200 es codigo de exito
+      console.log ("No se pudo acceder a la pagina, se salta el lenguaje "+language+ " error "+respuesta.status());
+    }else{
+      console.log ("Scraping de "+language); // se abrio la pagina
+      await sleep(5000);
+    }
+    
     descripcion = await pagina.evaluate(() => { 
       return document.querySelector('.h3.color-fg-muted').textContent; //buscamos el que cumpla con esta etiqueta, pues tiene la descripcion
     })

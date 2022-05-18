@@ -2,12 +2,23 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 var topics=[];
 topic_elegido="sort";
+
+function sleep(ms) { //para esperar y que no de error por demasiadas consultas
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
 async function scrapGitHub(urlGH) {
     try {
         seguir=0;
         const navegador = await puppeteer.launch();  // abrimos navegador
         const pagina = await navegador.newPage();    // abrimos pagina
-        await pagina.goto(urlGH);  // vamos al url y esperamos a que responda
+        respuesta = await pagina.goto(urlGH);  // vamos al url y esperamos a que responda
+        if (respuesta.status() != 200 ){ //200 es codigo de exito
+            console.log ("No se pudo acceder a la pagina, error "+respuesta.status());
+        }else{
+            console.log ("Scraping de la siguiente pagina"); // se abrio la pagina
+            await sleep(5000);
+        }
         
         fechasXArt=await pagina.evaluate(() => { //buscamos las fechas por articulos
             retorno=[];
