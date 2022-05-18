@@ -1,24 +1,23 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 
-// scrapGitHub("https://github.com/topics/c")
+
 
 async function scrapGitHub(urlGH, language) {
   try {
     const navegador = await puppeteer.launch();  // abrimos navegador
     const pagina = await navegador.newPage();    // abrimos pagina
     await pagina.goto(urlGH);  // vamos al url y esperamos a que responda
-
-    descripcion = await pagina.evaluate(() => {
-      return document.querySelector('.h3.color-fg-muted').textContent;
+    //abrimos el HTML de la pagina para buscar alli
+    descripcion = await pagina.evaluate(() => { 
+      return document.querySelector('.h3.color-fg-muted').textContent; //buscamos el que cumpla con esta etiqueta, pues tiene la descripcion
     })
 
-    numero = (/(\d+(,\d*)*)/).exec(descripcion);
-    await navegador.close();
-    // totalEntry=numero[0]
-    numero[0] = numero[0].replace(',', '');
+    numero = (/(\d+(,\d*)*)/).exec(descripcion); //tomamos el numero de apariciones con regex, se guarda en la posicion 0
+    await navegador.close(); //cerramos el navegador
+    numero[0] = numero[0].replace(',', ''); //borramos la coma
 
-    return numero[0];
+    return numero[0]; //retorna la cantidad de apariciones
   } catch (error) {
     console.error();
     return 0;
@@ -45,17 +44,17 @@ function calcRating(languages, min, max) {
         languages[i].nombre + ', ' + languages[i].rating + ', ' +
         languages[i].apar);
   }
-
+  //guardamos los datos para le grafico en abcisa y ordenada
   let abcisa = [];
   let ordenada = [];
   for (var i = 0; i < 10; i++) {
-    abcisa.push(languages[i].nombre);
-    ordenada.push(languages[i].apar);
+    abcisa.push(languages[i].nombre); //nombres
+    ordenada.push(languages[i].apar); //apariciones
   }
   let archivo = `
     var abcisa=${JSON.stringify(abcisa)};
-    var ordenada=${JSON.stringify(ordenada)};`;
-  fs.writeFileSync('./scraping/datos.js', archivo, {flag: 'w'});
+    var ordenada=${JSON.stringify(ordenada)};`; //en una cadena guardamos el contenido de la abcisa y ordenada
+  fs.writeFileSync('./scraping/datos.js', archivo, {flag: 'w'}); //creamos un archivo .js para guardar esos datos
 }
 
 
@@ -64,41 +63,38 @@ async function desaliasing(languages) {
   max = 0;
   totalEntry = '';
   try {
-    AliasJson = fs.readFileSync('./data/langAliases.json', 'utf-8');
-    AliasJson = JSON.parse(AliasJson);
-    //console.log(AliasJson);
-    for (var i = 0; i < 20; i++) {
-      actual = languages[i];
-      console
-      linkear = 'https://github.com/topics/' + AliasJson[languages[i].nombre];
-      // console.log(linkear);
-      languages[i].apar = Number(await scrapGitHub(linkear, languages[i].nombre));
+    AliasJson = fs.readFileSync('./data/langAliases.json', 'utf-8'); //abrimos el archivo json con los alias
+    AliasJson = JSON.parse(AliasJson);//pasamos a objeto
+
+    for (var i = 0; i < 20; i++) { //recorreremos cada lenguaje
+      linkear = 'https://github.com/topics/' + AliasJson[languages[i].nombre]; //link en github por lenguaje ya usando el alias
+
+      languages[i].apar = Number(await scrapGitHub(linkear, languages[i].nombre)); // llamamos a la funcion que busca el numero de apariciones y retorna dicho numero
 
       totalEntry =
-          totalEntry + languages[i].nombre + ', ' + languages[i].apar + '\n';
+          totalEntry + languages[i].nombre + ', ' + languages[i].apar + '\n'; //guarda el string de lo que se escribira en el archivo resultado
       
-      if (min > languages[i].apar || min<0) {
+      if (min > languages[i].apar || min<0) { //calculo minimo y maximo
         min = languages[i].apar;
       }
       if (max < languages[i].apar) {
         max = languages[i].apar;
       }
-      // console.log (languages[i].apar);
+
     }
     fs.writeFileSync(
         './data/Resultados.txt', totalEntry,
         {flag: 'w'});  // escribimos los resultados
-    await calcRating(languages, min, max);
+    await calcRating(languages, min, max); //calculamos los rating
   } catch (err) {
     console.error(err);
   }
 }
 
-// scrapGitHub("https://github.com/topics/c");
 
 async function ejecutarScrapGH() {  // aca empezamos
   let languages = [
-    {nombre: 'python', apar: 0, rating: 0},
+    {nombre: 'python', apar: 0, rating: 0}, 
     {nombre: 'c', apar: 0, rating: 0},
     {nombre: 'java', apar: 0, rating: 0},
     {nombre: 'c++', apar: 0, rating: 0},
@@ -118,15 +114,11 @@ async function ejecutarScrapGH() {  // aca empezamos
     {nombre: 'perl', apar: 0, rating: 0},
     {nombre: 'lua', apar: 0, rating: 0},
     {nombre: 'matlab', apar: 0, rating: 0},
-  ]
-  await desaliasing(languages);
+  ]; //lista de lenguajes
+  await desaliasing(languages); //vamos a buscar los alias por cada lenguaje
 }
 
-module.exports = {
+module.exports = { //exportamos para usar en otro archivo
 
   ejecutarScrapGH,
 };
-
-// export {ejecutarScrapGH};
-// export {desaliasing};
-// export {scrapGitHub};

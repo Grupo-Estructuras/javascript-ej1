@@ -5,7 +5,7 @@ const execfunc= require('child_process');
 
 process.setMaxListeners(Infinity);
 
-function getCommandLine() {
+function getCommandLine() { //determina el navegador predeterminado segun el SO para abrirlo
     switch (process.platform) {
       case 'darwin':
         return 'open';
@@ -19,8 +19,8 @@ function getCommandLine() {
   }
   
   async function iniciarProc(){
-    await ejecutarScrapGH2();
-    execfunc.exec(getCommandLine() + ' index2.html'); //vemos el grafico
+    await ejecutarScrapGH2(); //ejecuta todo el proceso
+    execfunc.exec(getCommandLine() + ' index2.html'); //abre el navegador predeterminado para el grafico
   }
 
   iniciarProc();
