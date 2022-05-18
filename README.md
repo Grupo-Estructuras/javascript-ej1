@@ -4,7 +4,7 @@
 - La configuracion es casi fija, se pueden cambiar los alias de los lenguajes en el archivo ```./data/langAliases.json``` en caso de que cambien los nombres de los lenguajes.
 
 ## Instalaciones Previas
-- Primeramente se debe instalar Node.js desde la página ```https://nodejs.org/es/download/``` dependiendo del sistema operativo
+- Primeramente se debe instalar ```Node.js```, que se puede descargar desde la página ```https://nodejs.org/es/download/``` teniendo en cuenta el sistema operativo
 - Dentro del directorio raíz iniciamos un proyecto npm con el comando ```npm init -y```
 - Seguidamente se debe instalar la libreria Puppeteer con el comando ```npm install puppeteer```
 - La libreria Chart.js, para los gráficos, se descarga automáticamente desde los archivos ```.HTML```
